@@ -90,7 +90,7 @@ sales_data test_sum;
 
 set_signals();
 
-if(test_sum.read(cin, test_sum)) {
+if(/*0 &&*/ test_sum.read(cin, test_sum)) {
 	sales_data trans;
 	while(trans.read(cin, trans)) {
 		if (test_sum.isbn() == trans.isbn()) {
@@ -103,6 +103,18 @@ if(test_sum.read(cin, test_sum)) {
 	cout<<"READ DONE!"<<endl;
 	test_sum.print(cout, test_sum);	
 }
+
+
+sales_data test_sum2, test_sum3;
+if (test_sum3.read(test_sum2.read(cin, test_sum2), test_sum3)) {
+	cout<<"test_sum2 read's result---> test_sum2: "<<endl;
+	test_sum2.print(cout, test_sum2);
+	cout<<"test_sum23 read's result---> test_sum3: "<<endl;
+	test_sum3.print(cout, test_sum3);
+	return 0; // In fact, test_sum2 and test_sum3 values are all ok, no issue.
+
+}
+
 
 cout<<"END PLACE."<<endl;
 /*
