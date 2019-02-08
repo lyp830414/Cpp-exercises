@@ -39,9 +39,17 @@ private:
 class Person4 {
 
 public:
-	Person4()= default; //SAME AS THE DEFAULT CONSTRUCTURE
+	Person4()= default; //SAME AS THE DEFAULT CONSTRUCTURE---> it is an inline function here
 	
 	string name;//="init_test_p4";
 private:
 	string mytest;
 };
+
+class Person5 {
+public:
+	Person5();
+
+
+};
+

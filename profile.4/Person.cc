@@ -5,6 +5,10 @@
 #include <string>
 #include "Person.hpp"
 
+
+Person5::Person5()=default; //Person5() here is not an inline function here
+
+
 //Person::Person() const { => WRONG:  constructors may not be cv-qualified
 	                     // DO NOT ALLOW THE CONSTRUCT FUNC USE 'const' in the construct func
 Person::Person() : const_val1("aa"), const_val2("cc"), name(""), address("") {//const value only allowed declare at place here 
