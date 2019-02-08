@@ -5,14 +5,21 @@
 #include <string>
 #include "Person.hpp"
 
-Person::Person() {
+//Person::Person() const { => WRONG:  constructors may not be cv-qualified
+	                     // DO NOT ALLOW THE CONSTRUCT FUNC USE 'const' in the construct func
+Person::Person() : const_val1("aa"), const_val2("cc"), name(""), address("") {//const value only allowed declare at place here 
 	this->name = "";
 	this->address = "";
 }
 
-Person::Person(string name, string address) {
+Person::Person(string name, string address) : const_val1("aa"), const_val2("cc") { //const value only allowed declare at place here 
 	this->name = name;
 	this->address = address;
+	
+	//const_val1 = "const_val1"; //in CONSTRUCT FUNC, const value can be assigned;
+	//this->const_val1 = "const_val11111"; //in CONSTRUCT FUNC, const value can be assigned;
+	//this->const_val2 = this->name;
+	//this->const_val2 = "const_val2222";
 }
 
 

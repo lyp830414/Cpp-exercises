@@ -2,8 +2,9 @@ using namespace std;
 
 class Person {
 public:
+	//Person() const;---> error: constructors may not be cv-qualified
 	Person();
-	Person(string name, string address);
+	Person(string name, string address);// const_val1("const_val1");
 	~Person(){}
 	
 	void get_value();
@@ -17,4 +18,6 @@ private:
 	string name;
 	string address;
 	
+	const string const_val1;
+	const string const_val2;	
 };
