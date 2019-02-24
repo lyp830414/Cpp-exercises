@@ -1,0 +1,114 @@
+
+ int转化为string
+
+1、使用itoa（int to string）
+复制代码
+
+ 1  //char *itoa( int value, char *string,int radix);
+ 2  // 原型说明：
+ 3  // value：欲转换的数据。
+ 4  // string：目标字符串的地址。
+ 5  // radix：转换后的进制数，可以是10进制、16进制等。
+ 6  // 返回指向string这个字符串的指针
+ 7 
+ 8  int aa = 30;
+ 9  char c[8];
+10  itoa(aa,c,16);
+11  cout<<c<<endl; // 1e
+
+复制代码
+
+注意：itoa并不是一个标准的C函数，它是Windows特有的，如果要写跨平台的程序，请用sprintf。
+
+2、使用sprintf
+复制代码
+
+ 1  // int sprintf( char *buffer, const char *format, [ argument] … );
+ 2  //参数列表
+ 3  // buffer：char型指针，指向将要写入的字符串的缓冲区。
+ 4  // format：格式化字符串。
+ 5  // [argument]...：可选参数，可以是任何类型的数据。
+ 6  // 返回值：字符串长度（strlen）
+ 7 
+ 8  int aa = 30;
+ 9  char c[8]; 
+10  int length = sprintf(c, "%05X", aa); 
+11  cout<<c<<endl; // 0001E
+
+复制代码
+
+3、使用stringstream
+复制代码
+
+1  int aa = 30;
+2  stringstream ss;
+3  ss<<aa; 
+4  string s1 = ss.str();
+5  cout<<s1<<endl; // 30
+6 
+7  string s2;
+8  ss>>s2;
+9  cout<<s2<<endl; // 30
+
+复制代码
+
+可以这样理解，stringstream可以吞下不同的类型，根据s2的类型，然后吐出不同的类型。
+4、使用boost库中的lexical_cast
+
+1  int aa = 30;
+2  string s = boost::lexical_cast<string>(aa);
+3  cout<<s<<endl; // 30
+
+3和4只能转化为10进制的字符串，不能转化为其它进制的字符串。
+
+ string转化为int
+1、使用strtol（string to long） 
+复制代码
+
+1 string s = "17";
+2  char* end;
+3  int i = static_cast<int>(strtol(s.c_str(),&end,16));
+4  cout<<i<<endl; // 23
+5 
+6  i = static_cast<int>(strtol(s.c_str(),&end,10));
+7  cout<<i<<endl; // 17
+
+复制代码
+
+2、使用sscanf
+复制代码
+
+1 int i;
+2  sscanf("17","%D",&i);
+3  cout<<i<<endl; // 17
+4 
+5  sscanf("17","%X",&i);
+6  cout<<i<<endl; // 23
+7 
+8  sscanf("0X17","%X",&i);
+9  cout<<i<<endl; // 23
+
+复制代码
+
+3、使用stringstream
+复制代码
+
+1  string s = "17";
+2 
+3  stringstream ss;
+4  ss<<s;
+5 
+6  int i;
+7  ss>>i;
+8  cout<<i<<endl; // 17
+
+复制代码
+
+注：stringstream可以吞下任何类型，根据实际需要吐出不同的类型。
+4、使用boost库中的lexical_cast
+
+1  string s = "17";
+2  int i = boost::lexical_cast<int>(s);
+3  cout<<i<<endl; // 17
+
+
