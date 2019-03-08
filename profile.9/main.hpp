@@ -109,15 +109,17 @@ typedef enum {
 
 class ISSales_data {
 public:
-	ISSales_data(istream is);
+	ISSales_data(istream & is);
 	//ISSales_data(ISSales_data & obj);
 private:
 	int total = 0;
 	int price = 0;
 	int bookno = 0;
+	initializer_list<int> l_prices = {};
+
 	bool Read(istream & is, ISSales_data & trans);
 	
-	void combine(const ISSales_data & trans);
+	void combine(int new_price);
 	void Prompt() const;
 	void EPrompt(ERROR_NUMBER) const;
 };

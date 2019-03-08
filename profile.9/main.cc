@@ -119,6 +119,11 @@ void test4() {
 }
 
 int main(int argc, char*argv[]) {
+	
+	ISSales_data test(cin);
+
+	return 0;
+	
 	A a;
 	A b;
 
