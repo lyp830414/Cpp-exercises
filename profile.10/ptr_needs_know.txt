@@ -1,0 +1,105 @@
+ auto_ptr与shared_ptr
+
+    注: 从c++11开始, auto_ptr已经被标记为弃用, 常见的替代品为shared_ptr
+    shared_ptr的不同之处在于引用计数, 在复制(或赋值)时不会像auto_ptr那样直接转移所有权
+
+auto_ptr
+
+    auto_ptr实际也是一种类, 拥有自己的析构函数, 生命周期结束时能自动释放资源
+    正因为能自动释放资源, 特别适合在单个函数内代替new/delete的调用, 不用自己调用delete也不用担心意外退出
+    auto_ptr对资源的拥有者只能有一个, 当两个auto_ptr进行等于号(赋值)操作时, 等于号后面的auto_ptr将失去资源的所有权
+    如果只是想显示auto_ptr对应资源的信息, 而不是更改的话, 要以const auto_ptr&(const + 引用)的方式来传递给其它函数
+
+赋值与安全传递
+
+#include <iostream>
+#include <memory>
+
+using namespace std;
+template<class T>
+ostream& operator<< (ostream& os,const auto_ptr<T>& p){
+    if(p.get() == NULL)
+        os<<"NULL";
+    else
+        os<<*p;
+    return os;
+}
+int main(int  argc,char *argv[]){
+    auto_ptr<int> p(new int(42));
+    auto_ptr<int> q;
+
+    cout<<"after initialization"<<endl;
+    cout<<"p:"<<p<<endl;
+    cout<<"q:"<<q<<endl;
+    
+    q=p;
+    cout<<"after assign"<<endl;
+    cout<<"p:"<<p<<endl;
+    cout<<"q:"<<q<<endl;
+
+    *q += 13;
+    p=q;
+    cout<<"another assign"<<endl;
+    cout<<"p:"<<p<<endl;
+    cout<<"q:"<<q<<endl;
+    return 0;
+}
+
+非安全传递
+以下与上面的例子差不多也只是显示auto_ptr所指对象的值, 以非const 引用的方向传递, 结果在函数调用中就把资源给释放了
+
+#include <iostream>
+#include <memory>
+
+using namespace std;
+template<class T>
+ostream& operator<< (ostream& os,auto_ptr<T> p){
+    if(p.get() == NULL)
+        os<<"NULL";
+    else
+        os<<*p;
+    return os;
+}
+int main(int  argc,char *argv[]){
+    auto_ptr<int> p(new int(42));
+    cout<<p<<endl;
+
+    if(p.get() == NULL)
+        cout<<"after call function, p = NULL"<<endl;
+    return 0;
+}
+
+shared_ptr
+
+#include <iostream>
+#include <tr1/memory>
+
+using namespace std;
+
+class base{
+    public:
+        base(){cout<<"base init"<<endl;}
+        virtual ~base(){cout<<"base over"<<endl;}
+        virtual void show(){cout<<"from base"<<endl;}
+};
+
+class derived: public base{
+    public:
+        derived(){cout<<"derived init"<<endl;}
+        ~derived(){cout<<"derived over"<<endl;}
+        void show(){cout<<"from derived"<<endl;}
+};
+
+int main () {
+    tr1::shared_ptr<derived> ptr(new derived());
+    tr1::shared_ptr<derived> ptr2(ptr);
+    cout<<ptr.get()<<endl;
+    cout<<ptr2.get()<<endl;
+
+    class derived *dptr=ptr.get();
+    dptr->show();
+
+    return 0;
+}
+
+
