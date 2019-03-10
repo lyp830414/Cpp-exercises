@@ -1,0 +1,130 @@
+
+转	
+为什么auto_ptr不可以用作stl容器的元素
+2016年08月21日 21:59:40 messiran10 阅读数：976
+
+转自：http://my.oschina.net/costaxu/blog/105101
+
+上个星期的博客shared_ptr源码剖析里其实遗漏了一个问题:为什么auto_ptr不可以作为STL标准容器的元素，而shared_ptr可以?  我在网上看了好多篇讲shared_ptr的文章里讲到了这个问题，不过大多文章只是简单两笔带过。我研究了一下这个问题，发现还是有挺多有价值的内容，所以把这个问题单独成一篇博客和大家分享。
+
+先从表象上看看这个问题，假如有这样的一段代码，是否能够运行？
+
+
+    int costa_foo()
+    {
+        vector< auto_ptr<int> > v(10);
+        int i=0;
+        for(;i<10;i++)
+        {   
+            v[i]=auto_ptr<int>(new int(i));
+        }   
+    }
+
+答案是否定的，甚至这段代码是无法编译通过的。g++编译器会报下面这个错误：
+
+
+
+    In file included from /usr/include/c++/4.4/memory:51,
+                     from foo.cpp:x:
+    /usr/include/c++/4.4/bits/stl_construct.h: In function ‘void std::_Construct(_T1*, const _T2&) [with _T1 = std::auto_ptr<int>, _T2 = std::auto_ptr<int>]’:
+    /usr/include/c++/4.4/bits/stl_uninitialized.h:187:   instantiated from ‘static void std::__uninitialized_fill_n<<anonymous> >::uninitialized_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = std::auto_ptr<int>*, _Size = unsigned int, _Tp = std::auto_ptr<int>, bool <anonymous> = false]’
+    /usr/include/c++/4.4/bits/stl_uninitialized.h:223:   instantiated from ‘void std::uninitialized_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = std::auto_ptr<int>*, _Size = unsigned int, _Tp = std::auto_ptr<int>]’
+    /usr/include/c++/4.4/bits/stl_uninitialized.h:318:   instantiated from ‘void std::__uninitialized_fill_n_a(_ForwardIterator, _Size, const _Tp&, std::allocator<_Tp2>&) [with _ForwardIterator = std::auto_ptr<int>*, _Size = unsigned int, _Tp = std::auto_ptr<int>, _Tp2 = std::auto_ptr<int>]’
+    /usr/include/c++/4.4/bits/stl_vector.h:1035:   instantiated from ‘void std::vector<_Tp, _Alloc>::_M_fill_initialize(size_t, const _Tp&) [with _Tp = std::auto_ptr<int>, _Alloc = std::allocator<std::auto_ptr<int> >]’
+    /usr/include/c++/4.4/bits/stl_vector.h:230:   instantiated from ‘std::vector<_Tp, _Alloc>::vector(size_t, const _Tp&, const _Alloc&) [with _Tp = std::auto_ptr<int>, _Alloc = std::allocator<std::auto_ptr<int> >]’
+    foo.cpp:22:   instantiated from here
+    /usr/include/c++/4.4/bits/stl_construct.h:74: error: passing ‘const std::auto_ptr<int>’ as ‘this’ argument of ‘std::auto_ptr<_Tp>::operator std::auto_ptr_ref<_Tp1>() [with _Tp1 = int, _Tp = int]’ discards qualifiers
+
+错误出在这一行:
+
+vector< auto_ptr<int> > v(10);
+
+
+
+这个错误是什么含义呢，我们看stl_construct.h的74行所在的函数：
+
+    64   /**
+     65    * Constructs an object in existing memory by invoking an allocated
+     66    * object's constructor with an initializer.
+     67    */
+     68   template<typename _T1, typename _T2>
+     69     inline void
+     70     _Construct(_T1* __p, const _T2& __value)
+     71     {
+     72       // _GLIBCXX_RESOLVE_LIB_DEFECTS
+     73       // 402. wrong new expression in [some_]allocator::construct
+     74       ::new(static_cast<void*>(__p)) _T1(__value);
+     75     }
+
+我来直接说这个函数的作用：把第二个参数__T2& value拷贝构造一份，然后复制到T1这个指针所指向的位置。它是如何做到的呢？
+
+
+看第第74行, 这里使用new的方法和我们平常所见到的似乎略有不同。 这是一个placement new。 placement new的语法是：
+
+new(p) T(value)
+
+placement new并不会去堆上申请一块内存，而是直接使用指针p指向的内存，将value对象拷贝一份放到p指向的内存上去。
+
+
+看到这里我就知道为什么编译器在编译本文开头的那段代码时会报这段错误” /usr/include/c++/4.4/bits/stl_construct.h:74: error: passing ‘const std::auto_ptr<int>’ as ‘this’ argument of ‘std::auto_ptr<_Tp>::operator std::auto_ptr_ref<_Tp1>() [with _Tp1 = int, _Tp = int]’ discards qualifiers" 了。通过查看auto_ptr的源代码（位置在 c++头文件目录的 backward/auto_ptr.h)可以发现， auto_ptr并没有一个参数为const auto_ptr& 的拷贝构造函数。换而言之， auto_ptr进行拷贝构造的时候，必需要修改作为参数传进来的那个auto_ptr。
+
+auto_ptr的拷贝构造函数是这样写的:
+
+auto_ptr(auto_ptr& __a) throw() : _M_ptr(__a.release()) { }
+
+可以看出来， 在拷贝构造一个auto_tr的时候， 必需要把参数的那个auto_ptr给release掉，然后在把参数的_M_ptr指针赋值给自己的_M_ptr指针。补充说明一下， _M_ptr是auto_ptr的一个成员，指向auto_ptr管理的那块内存，也就是在auto_ptr生命周期之外被释放掉的那块内存。
+
+当看到这里的时候，整个问题已经能解释通了。STL容器在分配内存的时候，必须要能够拷贝构造容器的元素。而且拷贝构造的时候，不能修改原来元素的值。而auto_ptr在拷贝构造的时候，一定会修改元素的值。所以STL元素不能使用auto_ptr。
+
+不过，还有一个很重要的问题没有解释。那就是为什么在设计auto_ptr的时候，拷贝构造要修改参数的值呢？
+
+其实这问题很简单，不看代码也可以解释清楚。auto_ptr内部有一个指针成员_M_ptr，指向它所管理的那块内存。而拷贝构造的时候，首先把参数的_M_ptr的值赋值给自己的_M_ptr，然后把参数的_M_ptr指针设成NULL，。如果不这样设计，而是直接把参数的_M_ptr指针赋值给自己的， 那么两个auto_ptr的_M_ptr指向同一块内存，在析构auto_ptr的时候就会出问题： 假如两个auto_ptr的_M_ptr指针指向了同一块内存，那么第一个析构的那个auto_ptr指针就把_M_ptr指向的内存释放掉了，造成后一个auto_ptr在析构时释要放一块已经被释放掉的内存，这明显不科学，会产生程序的段错误而crash掉。
+
+而shared_ptr则不存在这个问题， 在拷贝构造和赋值操作的时候，只会引起公用的引用计数的+1，不存在拷贝构造和赋值操作的参数不能是const的问题。
+
+总结：
+
+1 auto_ptr不能作为STL标准容器的元素。
+
+2 auto_ptr在拷贝复制和赋值操作时，都会改变参数。这是因为两个auto_ptr不能管理同一块内存。
+
+----------------------------------------------------------------------------------
+
+2013年8月16日
+
+
+看来真是有学而时习之的必要。 10分钟之前我竟然在搜这个问题，而全然忘了以前自己研究过。
+
+不过看到stackoverflow上的回答觉得比我写的简单多了, 抄过来:
+
+原文链接
+
+http://stackoverflow.com/questions/111478/why-is-it-wrong-to-use-stdauto-ptr-with-standard-containers
+
+The C++ Standard says that an STL element must be "copy-constructible" and "assignable." In other words, an element must be able to be assigned or copied and the two elements are logically independent.std::auto_ptrdoes not fulfill this requirement.
+
+Take for example this code:
+
+    class X
+    {
+    };
+     
+    std::vector<std::auto_ptr<X> > vecX;
+    vecX.push_back(new X);
+     
+    std::auto_ptr<X> pX = vecX[0];  // vecX[0] is assigned NULL
+
+To overcome this limitation, you should use the std::unique_ptr, std::shared_ptr or std::weak_ptr smart pointers or the boost equivalents if you don't have C++11. Here is the boost library documentation for these smart pointers.
+
+
+然后又去翻了一下auto_ptr的源码,  看到operator =的代码这样写的:
+
+223       operator=(auto_ptr& __a) throw()
+224       {
+225     reset(__a.release());
+226     return *this;
+227       }
+
+
+多个auto_ptr不能管理同一片内存， 执行=的时候，就把原来的auto_ptr给干掉。其实从逻辑上来讲，如果多个auto_ptr管理同一块内存肯定有问题。第一个auto_ptr析构的时候就应该把内存释放掉了, 第二个auto_ptr再析构的时候，就要去释放已经被释放的内存了， 程序肯定挂掉。
+
