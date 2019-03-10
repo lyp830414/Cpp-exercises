@@ -34,13 +34,13 @@ class Vec {
 		vector<int> abc = {1,2,3}; //initializer_list
 		vector<int*> def = {new int, new int, new int};
 		//wrong-->vector<auto_ptr<int>> def2 = {auto_ptr<int>(new int)};
-		//wrong->
-		vector<auto_ptr<int>> def22; //= {auto_ptr<int>(new int)};//, auto_ptr<int>(new int), auto_ptr<int>(new int)};
+		//wrong-> auto_ptr cannot be in stl containers, but shared_ptr can
+		//ector<auto_ptr<int>> def22; //= {auto_ptr<int>(new int)};//, auto_ptr<int>(new int), auto_ptr<int>(new int)};
 
+		auto_ptr<int> p = auto_ptr<int>(new int[4]);
 	private:
 		int a[10] = {0};
 		string b[10] ={""};
-		auto_ptr<int> p = auto_ptr<int>(new int[4]);
 		
 		
 };

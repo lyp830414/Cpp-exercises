@@ -51,6 +51,11 @@ auto Vec::echo_vec() -> void {
 	//cout<<def2[0].get()<<"."<<def2[1].get()<<"."<<def2[1].get()<<"."<<endl;
 	//cout<<def2[0].get()<<endl;
 	//cout<<(void**)&def2[0]<<"."<<(void**)&def2[1]<<"."<<(void**)&def2[2]<<endl;
+	if (p.get()) {
+		cout<<p.get()[0]<<endl;
+	} else {
+		cout<<"NULLPTR"<<endl;
+	}
 }
 
 
@@ -59,6 +64,7 @@ auto test2() -> void {
 
 	Vec avec;
 	avec.p2 = new int[50];
+
 	//avec.echo_addrs();
 	//cout<<"+++------+++!!!!!\n\n\n\n\n"<<endl;
 	Vec bvec(avec); //here ,if no copy constructor, then avec's auto_ptr p will be released(avec.p = 0 ), then bvec's pointer p takes over it..(bvec.p is valid value)
@@ -71,14 +77,16 @@ auto test2() -> void {
 
 auto test3() ->void {
 	Vec avec;
+	avec.p.get()[0] = 200;
 	Vec bvec(avec);
-
+	
+	avec.abc[0]=100;
 	//avec.echo_vec();
 	//bvec.echo_vec();
 	//cout<<"---------------\n\n"<<endl;
 	int i = 0;
 	for (i= 0; i < 100; i++) {
-		avec.abc.push_back(100); //NOte here avec's abc memory addr changes!!!!!
+		avec.abc.push_back(300); //NOte here avec's abc memory addr changes!!!!!
 	}
 	avec.echo_vec(); 
 	bvec.echo_vec();
@@ -93,7 +101,22 @@ auto test4(initializer_list<int> ltest) -> void {
 }
 
 int main(int argc, char*argv[]) {
+	auto_ptr<int> pt(new int[3]);
+	auto_ptr<int> pt2(new int[3]);
 
+	pt.get()[0]=10;
+	pt.get()[1]=21;
+	pt.get()[2]=22;
+
+	pt2 = pt; //pt will be 0(pt.release()), but data and memory will be kepted to pt2.
+	auto_ptr<int> & pt3 = pt2; //pt2 and pt3 all keeping, no release,they are same people.
+	
+	cout<<pt3.get()[0]<<"."<<pt3.get()[1]<<"."<<pt3.get()[2]<<endl;
+
+	//bad-->for (auto &v: pt2.get()) {
+		//cout<<v<<endl;
+	//}
+	return 0;
 	//test();
 	//test2();
 	test3();
