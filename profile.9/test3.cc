@@ -48,24 +48,29 @@ class F {
 public:
 	F()=default;
 	virtual void abc(){cout<<"F: abc"<<endl;}
+	virtual void abcd(){cout<<"C1: abcd"<<endl;}
 	virtual void testthis(){cout<<"F this"<<endl;}
 	virtual void hello(){cout<<"hello F"<<endl;}
+	void hihi(){cout<<"F hihi"<<endl;}
 };
 
 class C1 : public F {
 public:
 	C1()=default;
 	void abc(){cout<<"C1: abc"<<endl;}
+	void abcd(){cout<<"C1: abcd"<<endl;}
 	void testthis(){cout<<"C1 this"<<endl;}
 	void hello(){cout<<"hello C1"<<endl;}
+	void hihi(){cout<<"C1 hihi"<<endl;}
 };
 
 class C2: public C1 {
 public:
 	C2()=default;
 	void hello(){cout<<"hello c2"<<endl;}
-	void testthis(){cout<<"C2 this:"<<sizeof(*this)<<endl;/*for cpn, here is c2 len: 8 */ this->abc(); /*for cpn, here is C3's abc func due to it is virtual func */ cout<<"||||"<<endl;}
+	void testthis(){cout<<"C2 this:"<<sizeof(*this)<<endl;/*for cpn, here is c2 len: 8 */ this->abcd();/*for cpn, here is C3's abc func due to it is virtual func */  this->hihi(); /*for cpn, here is C2 hihi */ cout<<"||||"<<endl;}
 	void abc(){cout<<"C2: abc"<<endl;}
+	void hihi(){cout<<"C2 hihi"<<endl;}
 };
 
 class C3: public C2 {
@@ -74,6 +79,7 @@ public:
 	void testmysize(){cout<<sizeof(*this)<<endl;}	
 	void hello(){cout<<"hello C3"<<endl;}
 	void abc(){cout<<"C3: abc"<<endl;}
+	void hihi(){cout<<"C3 hihi"<<endl;}
 private:
 	string abcd="ssssssssssssssssssssssssssss";
 };
@@ -99,4 +105,5 @@ int main() {
 	//c2.testthis();
 	cpn->testthis();
 	c3.testmysize();
+	cpn->hihi();
 }
