@@ -1,6 +1,6 @@
 #include "test3.hpp"
 
-int main(int argc, char *argv[]) {
+int main33(int argc, char *argv[]) {
 	A a;
 	B b;
 	A *pa = &a;
@@ -42,4 +42,45 @@ parent *pa = &a;
 parent *pb = &b;
 
 child *pcld= dynamic_cast<child*>(&a);
+}
+
+class F {
+public:
+	F()=default;
+	virtual void abc(){cout<<"F: abc"<<endl;}
+};
+
+class C1 : public F {
+public:
+	C1()=default;
+	void abc(){cout<<"C1: abc"<<endl;}
+};
+
+class C2: public C1 {
+public:
+	C2()=default;
+	void abc(){cout<<"C2: abc"<<endl;}
+};
+
+class C3: public C2 {
+public:
+	C3()=default();
+		
+}
+
+int main() {
+	C1 c1;
+	C2 c2;
+	C3 c3;
+
+	C2 *cp3 = &c3;
+
+	c3->abc(); //c3 has no abc(), so use c2's virtual function, vptr[0] CHANGES to C2::abc(). otherwise vptr[0] will be c3's abc() if c3 has abc(). vptr table is at very beginning of a class object.
+	//F *cp = &c2;
+	C1 *cp = &c2;
+	//F *cp = dynamic_cast<C1*>(&c2);
+	//C1 *cp2 = dynamic_cast<C1*>(&c2);
+	cp->abc();
+	//cp2->abc();
+	//cout<<"cp:"<<(void*)cp<<endl;
 }
