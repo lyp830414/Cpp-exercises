@@ -48,25 +48,35 @@ class F {
 public:
 	F()=default;
 	virtual void abc(){cout<<"F: abc"<<endl;}
+	virtual void testthis(){cout<<"F this"<<endl;}
+	virtual void hello(){cout<<"hello F"<<endl;}
 };
 
 class C1 : public F {
 public:
 	C1()=default;
 	void abc(){cout<<"C1: abc"<<endl;}
+	void testthis(){cout<<"C1 this"<<endl;}
+	void hello(){cout<<"hello C1"<<endl;}
 };
 
 class C2: public C1 {
 public:
 	C2()=default;
+	void hello(){cout<<"hello c2"<<endl;}
+	void testthis(){cout<<"C2 this:"<<sizeof(*this)<<endl;/*for cpn, here is c2 len: 8 */ this->abc(); /*for cpn, here is C3's abc func due to it is virtual func */ cout<<"||||"<<endl;}
 	void abc(){cout<<"C2: abc"<<endl;}
 };
 
 class C3: public C2 {
 public:
-	C3()=default();
-		
-}
+	C3()=default;
+	void testmysize(){cout<<sizeof(*this)<<endl;}	
+	void hello(){cout<<"hello C3"<<endl;}
+	void abc(){cout<<"C3: abc"<<endl;}
+private:
+	string abcd="ssssssssssssssssssssssssssss";
+};
 
 int main() {
 	C1 c1;
@@ -75,7 +85,7 @@ int main() {
 
 	C2 *cp3 = &c3;
 
-	c3->abc(); //c3 has no abc(), so use c2's virtual function, vptr[0] CHANGES to C2::abc(). otherwise vptr[0] will be c3's abc() if c3 has abc(). vptr table is at very beginning of a class object.
+	cp3->abc(); //c3 has no abc(), so use c2's virtual function, vptr[0] CHANGES to C2::abc(). otherwise vptr[0] will be c3's abc() if c3 has abc(). vptr table is at very beginning of a class object.
 	//F *cp = &c2;
 	C1 *cp = &c2;
 	//F *cp = dynamic_cast<C1*>(&c2);
@@ -83,4 +93,10 @@ int main() {
 	cp->abc();
 	//cp2->abc();
 	//cout<<"cp:"<<(void*)cp<<endl;
+	F *cpn = &c3;
+	
+	cout<<"!!!!!!"<<endl;
+	//c2.testthis();
+	cpn->testthis();
+	c3.testmysize();
 }
