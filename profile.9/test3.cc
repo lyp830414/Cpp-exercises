@@ -84,7 +84,89 @@ private:
 	string abcd="ssssssssssssssssssssssssssss";
 };
 
+class TEST1 {
+	public:
+		TEST1()=default;
+		string test1 = "test2";		
+		string *ptest1 = &test1;		
+};
+
+class TEST2 {
+	public:
+		TEST2()=default;
+		string test2 = "testm";		
+
+};
+
+class DEL_CLASS {
+
+	public:
+		DEL_CLASS(int *p) {
+			delete p;
+		}	
+};
+
+void deletep(int *p) {
+	delete p;
+
+	return;
+}
+
 int main() {
+while(1) {
+//	TEST1 *ptest1 = new TEST1;
+//	TEST2 *ptest2 = new TEST2;
+
+//	ptest1->ptest1 = &(ptest2->test2);
+	
+	int testc = 6;
+	unique_ptr<int> p(new int(testc));//p.reset() or p invalid, then will call std::default_delete(p)
+	unique_ptr<int, void (*)(int *)> pmm1(new int(testc), deletep);
+
+	std::unique_ptr<int, void(*)(int*)> pmm2(new int[10], [](int* p) /*lambda func*/{
+        	delete[] p;
+    });
+
+	unique_ptr<int, decltype(deletep) * > ptest(new int(testc), deletep);
+	DEL_CLASS my(ptest.get());
+	//wrong: unique_ptr<int, DEL_CLASS> ptest(new int(testc), my);
+	//wrong: seems only func or operator() works :  unique_ptr<int, DEL_CLASS> ptest(new int(testc), DEL_CLASS::DEL_CLASS);
+	/***** MEMORY LEAK CODE PART BEGIN ********/
+
+	/*
+	 int *p2 =p.release(); //if you do not delete p2 or call p.reset(p2) and delete p2, then memory will leak!!!!
+	cout<<p.get()<<endl;
+	
+	p.reset(); //here reset is useless!!!! due to p.get() is 0 !!!!
+	
+	if you use 'delete p2 or p.reset before p.release', then MEM WILL NOT LEAK HERE. if you use p.reset() after p.release, it will no help due to p.get() is 0.
+	*/
+	/***** MEMORY LEAK CODE PART END ********/
+	
+	
+	//p.reset();-->free p memory
+	int *p2 = nullptr;
+	//p.reset(p2); ==>free p memory, and let p point to p2's mem:  p2 must have a new memory, otherwise here p and p2 is nullptr
+	p2 = new int(testc+1);
+	p.reset(p2); //free p mem, now point p to p2 mem. 
+	cout<<p.get()<<endl;
+
+	cout<<*p2<<endl;
+	//p.reset();
+	//*p2 = 13;
+	//*p2 = 11;
+
+	//cout<<*p2<<endl;
+
+
+	//wrong:  cout<<ptest2->(*(ptest1->ptest1))<<endl;
+	//wrong : cout<<ptest2->"test2"<<endl;
+	//wrong: cout<<ptest2->*(&(ptest2->test2))<<endl;
+
+		usleep(1);
+}
+
+	exit(0);
 	C1 c1;
 	C2 c2;
 	C3 c3;
@@ -106,4 +188,7 @@ int main() {
 	cpn->testthis();
 	c3.testmysize();
 	cpn->hihi();
+
+
+	
 }
