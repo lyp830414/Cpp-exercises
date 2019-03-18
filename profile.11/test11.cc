@@ -73,6 +73,7 @@ while(true) {
 	
 
 	cout<<"Done."<<endl;
+	break;
 }
 	return 0;
 }

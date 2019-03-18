@@ -44,7 +44,16 @@ class B {
 		int B::*pb_ccc = &B::prib_ccc;
 		
 		auto test_ptr() ->void {
+			cout<<"\n\n=========>=================>"<<endl;
 			cout<<get_ptr()->*pa_abc<<endl;
+			cout<<get_ptr()->pub_abc<<endl;
+			//ok. can also change it.
+			get_ptr()->*pa_abc = 55;
+			cout<<get_ptr()->*pa_abc<<endl;
+			cout<<get_ptr()->pub_abc<<endl;
+			cout<<"<=========<=================<\n\n";
+			//wrong. do not support this usage.
+			//cout<<get_ptr()->&pa_abc<<endl;
 		}
 	
 	private:
