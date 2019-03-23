@@ -1,5 +1,9 @@
 #include "Screen.hpp"
 
+extern ostream & storeOn(ostream & os, M0 & m0);
+extern M1 & storeOn(M1 & m1, M2 & m2);
+
+
 //wrong:  for member static value init, forbid carry 'static'
 //static int TEST_STATIC2::aaa = 0; 
 
@@ -15,6 +19,14 @@ int Screen2::pri_val1;
 int M0::aaac = 0;
 int M0::s_pri_m0 = 0;
 */
+
+string abcd(6, 'c'); //-->/*cccccc*/
+char *pc = "c12345678";
+
+string def(pc, 6);  //-->/*c12345*/
+string def2("pcsssssS:", 6);  //-->/*c12345*/
+string def3("pcs:", 6);  //-->/*c12345*/
+
 
 void Window_mgr::clear(ScreenIndex i) {
 	Screen & s = screens[i];

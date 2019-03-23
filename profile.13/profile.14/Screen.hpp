@@ -19,13 +19,6 @@
 #define _SCREEN_HPP
 using namespace std;
 
-string abc(6, 'c'); //-->/*cccccc*/
-char *pc = "c12345678";
-
-string def(pc, 6);  //-->/*c12345*/
-string def2("pcsssssS:", 6);  //-->/*c12345*/
-string def3("pcs:", 6);  //-->/*c12345*/
-
 class Window_mgr;
 
 class TEST {
@@ -207,7 +200,7 @@ class M2 {
 	private:
 		void test_m2(){cout<<"hi M2 private"<<endl;M0 m0; cout<<m0.m0<<endl; M1 m1; /*m1.test_m(*this);---> DEAD LOOP!!!!!  M1--> m1-->test_m-->M2 m2-->m2.test_m2()-->again--->always loops*/}
 };		
-		int pri_val_m2 = 0;
+//int pri_val_m2 = 0;
 
 class TEST_STATIC {
 	public:
@@ -285,9 +278,5 @@ class Screen2 {
 		static int pri_val1;
 		mutable int pri_val2 = 17;
 };
-
-
-extern ostream & storeOn(ostream & os, M0 & m0);
-extern M1 & storeOn(M1 & m1, M2 & m2);
 
 #endif
