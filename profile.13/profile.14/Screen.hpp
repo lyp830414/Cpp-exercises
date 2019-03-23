@@ -160,6 +160,8 @@ class M0 {
 	friend ostream & storeOn(ostream &, M0 &);
 
 	public:
+		int pub_m0;
+		static int s_pub_m0;
 		friend class M2;
 		void testvalue(int mmm) const {
 			int cc = 0;
@@ -184,6 +186,7 @@ class M0 {
 		//static int aaa = 0; -->wrong, if  use init value, must use const static int aaa = 0; otherwise cannot use = *** style for static variable */
 		static int aaac; //ok
 		mutable int bbb = 0;
+		static int s_pri_m0;
 };
 
 class M1 {
@@ -191,6 +194,7 @@ class M1 {
 	//wrong: friend void M2::test_m2();
 	friend class M2; //ok
 	public:
+		//int M2::*pri_val_m2 = &M0::m0; //private is also ok for member-pointer.
 		M1()=default;
 		void test_m(M2 m2);
 };
@@ -202,7 +206,8 @@ class M2 {
 		M2()=default;
 	private:
 		void test_m2(){cout<<"hi M2 private"<<endl;M0 m0; cout<<m0.m0<<endl; M1 m1; /*m1.test_m(*this);---> DEAD LOOP!!!!!  M1--> m1-->test_m-->M2 m2-->m2.test_m2()-->again--->always loops*/}
-};
+};		
+		int pri_val_m2 = 0;
 
 class TEST_STATIC {
 	public:
@@ -213,9 +218,18 @@ class TEST_STATIC {
 
 class TEST_STATIC2 {
 	friend ostream & storeOn(ostream &, M0 &);
-
+	
 	public:
 		friend class M2;
+
+		//using PM1_FUNC = decltype(&M1::test_m);
+		using PM1_FUNC = void (M1::*)(M2);
+		
+		PM1_FUNC p_m1_func = &M1::test_m;
+		unique_ptr<M1> pm1;
+
+
+		TEST_STATIC2(){aaa= 1; pm0.reset(new M0); pm1.reset(new M1);M2 m2; (pm1.get()->*p_m1_func)(m2);}
 		void testvalue(int mmm) const {
 			int cc = 0;
 			cc = 17; //ok. local tmp variable can be changed.
@@ -225,9 +239,13 @@ class TEST_STATIC2 {
 			
 			cout<<cc<<" "<<aaa<<" "<<bbb<<endl;
 			cout<<"TEST_STATIC end."<<endl;
+
+			if(pm0.get()) {
+				cout<<pm0.get()->*m0_ptr<<endl;
+			}
 		}
 
-		TEST_STATIC2(){cout<<"TEST_STATIC start:"<<endl; this->testvalue(3);}
+		//TEST_STATIC2(){cout<<"TEST_STATIC start:"<<endl; this->testvalue(3);}
 		/* wrong: only construct func can use class variable inits, like M0(): aaa(2), bbb(16) {....}
 		void testvalue(int mmm):aaa(2), bbb(16) {
 			
@@ -235,9 +253,12 @@ class TEST_STATIC2 {
 		
 
 	private:
+		int M0::*m0_ptr = &M0::pub_m0;
+		unique_ptr<M0> pm0 = nullptr; 
 		int m0 = 0;
-		//static int aaa = 0; -->wrong, if  use init value, must use const static int aaa = 0; otherwise cannot use = *** style for static variable */
-		static int aaa; //ok
+		//static int aaa = 0; --> wrong, if  use init value, must use const static int aaa = 0; otherwise cannot use = *** style for static variable */
+		//static int aaa; -->if function used it, then in link stage will be wrong if function() const  is used. 
+		static int aaa; //static must be initialized in the very beginning of cc files, no mater it is private or static
 		mutable int bbb = 0;
 };
 

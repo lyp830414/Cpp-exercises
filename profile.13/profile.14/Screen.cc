@@ -1,5 +1,14 @@
 #include "Screen.hpp"
 
+//wrong:  for member static value init, forbid carry 'static'
+//static int TEST_STATIC2::aaa = 0; 
+
+//ok
+int TEST_STATIC2::aaa = 0; //static member must declare at cpp file beginning(nomather private, public), oterwise cannot be found in codes.
+int M0::aaac = 0;
+int M0::s_pri_m0 = 0;
+
+
 void Window_mgr::clear(ScreenIndex i) {
 	Screen & s = screens[i];
 	s.contents = string(s.height*s.width, ' ');
@@ -10,12 +19,25 @@ int main(void) {
 	Screen screen;
 	TESTCLASS tst(screen);
 	M0 m0;
+	//wrong. private cannot be used in code, even for member-pointer.
+	//int M0::*p = &M0::pri_m0;
+	
+	int M0::*p = &M0::pub_m0; //ok
+	//auto p = &M0::pub_m0; //ok
+	
 	M1 m1;
 	M2 m2;
 
-	m1.test_m(m2);
-	TEST_STATIC2 st;
 
+	m1.test_m(m2);
+
+
+	
+	cout<<m0.*p<<endl;
+	//equal to: cout<<m0.pub_m0<<endl;
+	cout<<"================================"<<endl;
+	TEST_STATIC2 st;
+	st.testvalue(22);
 	return 0;
 }
 
@@ -61,5 +83,6 @@ void ABC::testabc(){
 }
 
 void M1::test_m(M2 m2){
+	cout<<"M1::TEST_M here."<<endl;
 	m2.test_m2();
 }
