@@ -4,10 +4,16 @@
 //static int TEST_STATIC2::aaa = 0; 
 
 //ok
-int TEST_STATIC2::aaa = 0; //static member must declare at cpp file beginning(nomather private, public), oterwise cannot be found in codes.
+int TEST_STATIC2::aaa; //static member must declare at cpp file beginning(nomather private, public), oterwise cannot be found in codes.
+int M0::aaac;
+int M0::s_pri_m0;
+
+//also ok for following
+
+/*int TEST_STATIC2::aaa = 0; //static member must declare at cpp file beginning(nomather private, public), oterwise cannot be found in codes.
 int M0::aaac = 0;
 int M0::s_pri_m0 = 0;
-
+*/
 
 void Window_mgr::clear(ScreenIndex i) {
 	Screen & s = screens[i];
