@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <memory>
-
+#include <vector>
 #pragma once
 
 using namespace std;
@@ -47,6 +47,29 @@ private:
 
 	double revenue = 0.0;
 
+};
+
+class A {
+	public:
+		int a;
+		vector<int> a_vec = {1,2,3};
+		auto echo_value()->void{
+			cout<<">>>>>>>>>>>>>>>>>>>>"<<endl;
+			for (auto &v: a_vec) {
+				cout<<v<<" ";
+			}
+			cout<<endl;
+
+			for (auto &v : a_privec) {
+				cout<<v<<" ";
+			}
+			cout<<endl;
+			cout<<"<<<<<<<<<<<<<<<<<<<<"<<endl;
+
+		}
+	private:
+		int pri_a;
+		vector<int> a_privec = {4,5,6};
 };
 
 Sales_data add(const Sales_data &, const Sales_data &);

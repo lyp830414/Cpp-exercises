@@ -41,7 +41,7 @@ Sales_data::Sales_data(istream & is) {
 }
 
 
-double Sales_data::avg_prices() const {
+inline double Sales_data::avg_prices() const {
 
 	if (units_sold) {
 		return revenue/units_sold;
@@ -51,6 +51,18 @@ double Sales_data::avg_prices() const {
 }
 
 int main(int argc, char *argv[]) {
+
+	A a;
+	A b(a);
+	A c;
+	c = a;
+	a.a_vec[2] = 100;
+	b.a_vec[2]=103;
+	a.echo_value();
+
+	b.echo_value();
+	c.echo_value();
+	
 	istream & is = cin;
 	ostream & os = cout;
 	Sales_data total(is);

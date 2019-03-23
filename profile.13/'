@@ -1,0 +1,46 @@
+#include "Screen.hpp"
+int test(initialier_list<int> labc) {
+	for (auto &v : labc) {
+		cout<<v<<endl;
+	}
+}
+
+int main(void) {
+
+	//cout<<"HERE"<<endl;
+	//Screen abc(1, 2, 'a');
+	
+	//ok but cannot define using 'test(1,2)' in class-->TEST test1(1,2);
+
+	Screen myscreen(2, 6, 'm');
+	cout<<"myscreen start"<<endl;
+	char ch = myscreen.get();
+	cout<<ch<<endl;
+	ch = myscreen.get(1, 9);
+	cout<<ch<<endl;
+	cout<<"my screen end"<<endl;
+	
+	string abc= "abcdef";
+
+	cout<<abc[87]<<","<<sizeof(abc[87])/*sizeof=1*/<<" "<<sizeof(abc)<<endl; //will not crash, default string length is 32(sizeof), abc.size() is 6(strlen), abc[87 is '' empty .
+
+	return 0;
+}
+
+inline Screen & Screen::move(pos r, pos c) {
+	pos row = r * width;
+	cursor = row + c;
+
+	return *this;
+}
+
+inline char Screen::get(pos r, pos c) const {
+	pos row = r*width;
+	return contents[row + c];
+}
+
+void Screen::some_member()const {
+	access_ctr++;
+}
+
+
