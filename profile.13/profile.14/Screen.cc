@@ -1,9 +1,5 @@
 #include "Screen.hpp"
 
-extern ostream & storeOn(ostream & os, M0 & m0);
-extern M1 & storeOn(M1 & m1, M2 & m2);
-
-
 //wrong:  for member static value init, forbid carry 'static'
 //static int TEST_STATIC2::aaa = 0; 
 

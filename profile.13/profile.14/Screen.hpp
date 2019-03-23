@@ -145,9 +145,6 @@ class M0;
 class M1;
 class M2;
 
-extern ostream & storeOn(ostream &, M0 &);
-extern M1 & storeOn(M1 &, M2 &);
-
 
 class M0 {
 	friend ostream & storeOn(ostream &, M0 &);
