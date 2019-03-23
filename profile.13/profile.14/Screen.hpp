@@ -262,4 +262,32 @@ class TEST_STATIC2 {
 		mutable int bbb = 0;
 };
 
+class Screen2;
+
+class Windows_mgr2 {
+	public:
+		void clear() const;
+		Windows_mgr2();
+	private:
+		vector<Screen2> screens;
+
+};
+
+class Screen2 {
+	friend void Windows_mgr2::clear() const;
+	public:
+		Screen2(vector<Screen2>::size_type ht, vector<Screen2>::size_type wd, char c){
+			pri_val1 = 0;
+		}
+		
+	private:
+		int pri_val_0 = 1;
+		static int pri_val1;
+		mutable int pri_val2 = 17;
+};
+
+
+extern ostream & storeOn(ostream & os, M0 & m0);
+extern M1 & storeOn(M1 & m1, M2 & m2);
+
 #endif

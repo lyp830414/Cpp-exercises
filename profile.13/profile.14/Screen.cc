@@ -7,6 +7,7 @@
 int TEST_STATIC2::aaa; //static member must declare at cpp file beginning(nomather private, public), oterwise cannot be found in codes.
 int M0::aaac;
 int M0::s_pri_m0;
+int Screen2::pri_val1;
 
 //also ok for following
 
@@ -22,6 +23,20 @@ void Window_mgr::clear(ScreenIndex i) {
 
 
 int main(void) {
+	M0 m0_0;
+	M1 m1_1;
+	M2 m2_2;
+
+	storeOn(cout, m0_0);
+	storeOn(m1_1, m2_2);
+
+	Windows_mgr2 mgr2;
+	Screen screen0;
+
+	mgr2.clear();
+	
+	cout<<"+++++++++++++++"<<endl;
+
 	Screen screen;
 	TESTCLASS tst(screen);
 	M0 m0;
@@ -92,3 +107,4 @@ void M1::test_m(M2 m2){
 	cout<<"M1::TEST_M here."<<endl;
 	m2.test_m2();
 }
+
