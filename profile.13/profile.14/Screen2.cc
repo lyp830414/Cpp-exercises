@@ -22,3 +22,7 @@ void Windows_mgr2::clear() const {
 
 	cout<<"clear in Windows_mgr2:"<<Screen_val.pri_val1<<" "<<Screen_val.pri_val2<<endl;
 }
+
+void hello(Windows_mgr2 & obj){
+	cout<<"hello"<<":"<<(void*)&obj.screens[0]<<endl;
+}

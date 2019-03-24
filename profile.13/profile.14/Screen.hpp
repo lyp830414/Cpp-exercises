@@ -254,10 +254,16 @@ class TEST_STATIC2 {
 
 class Screen2;
 
+class Windows_mgr2;
+
+void hello(Windows_mgr2 &);
+
 class Windows_mgr2 {
+	friend void hello(Windows_mgr2 &);
 	public:
 		void clear() const;
 		Windows_mgr2();
+		void mm(){hello(*this);}
 	private:
 		vector<Screen2> screens;
 
@@ -275,5 +281,7 @@ class Screen2 {
 		static int pri_val1;
 		mutable int pri_val2 = 17;
 };
+
+
 
 #endif
