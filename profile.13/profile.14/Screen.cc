@@ -1,5 +1,5 @@
 #include "Screen.hpp"
-
+#include "Screen2.hpp"
 //wrong:  for member static value init, forbid carry 'static'
 //static int TEST_STATIC2::aaa = 0; 
 
@@ -31,6 +31,15 @@ void Window_mgr::clear(ScreenIndex i) {
 
 
 int main(void) {
+	A a(1);
+	A a2(cin); //also A a2(); cin will be the default istream
+	cout<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
+	B(cin);
+	cout<<"uyuuuuuuuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
+	C c;
+	BB bb;
+	cout<<"bb vec size:"<<bb.vec.size()<<", vec[1]:"<<bb.vec[0].dd<<endl;
+	cout<<"XXXXXuyuuuuuuuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
 	M0 m0_0;
 	M1 m1_1;
 	M2 m2_2;
@@ -38,8 +47,10 @@ int main(void) {
 	storeOn(cout, m0_0);
 	storeOn(m1_1, m2_2);
 	
-	cout<<"............."<<endl;
+	cout<<"-->............."<<endl;
 	Windows_mgr2 mgr2;
+	mgr2.mm();
+	cout<<"<--............."<<endl;
 	Screen screen0;
 
 	mgr2.clear();
@@ -68,6 +79,11 @@ int main(void) {
 	cout<<"================================"<<endl;
 	TEST_STATIC2 st;
 	st.testvalue(22);
+
+	Excercise ex;
+	cout<<"hi"<<endl;
+	cout<<ex.setVal(1)<<endl;
+	cout<<"ok"<<endl;
 	return 0;
 }
 

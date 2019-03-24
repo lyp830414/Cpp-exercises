@@ -45,6 +45,11 @@ class Screen {
 		int test_tval = 0;
 		typedef std::string::size_type pos;
 		//using pos=std::string:size_type;
+		
+		pos size() const;
+	       //	{
+		//	return height * width;
+	//	}
 		inline void echo(int num) const {
 			cout<<contents[num]<<endl;
 		}
@@ -258,14 +263,44 @@ class Windows_mgr2;
 
 void hello(Windows_mgr2 &);
 
+typedef double Monkey;
 class Windows_mgr2 {
+	using lyp_type = std::string::size_type;
 	friend void hello(Windows_mgr2 &);
 	public:
 		void clear() const;
 		Windows_mgr2();
-		void mm(){hello(*this);}
+		void mm(){hello(*this); dummy_fcn();}
+		Monkey bal;
+
+		//wrong->redifination typedef int Monkey;
+		//wrong->redifination typedef double Monkey;
+
 	private:
+		//wrong->redifination typedef int Monkey;
 		vector<Screen2> screens;
+		lyp_type hello_mgr();
+		string::size_type dummy_fcn() {
+			//in class you can use this <class_name>::value.
+			//but outside class only static and pub variable can use <class_name>::value
+			cout<<w*Windows_mgr2::h<<endl;
+			
+			//same as cout << w*this->h << endl;
+			return w * Windows_mgr2::h;
+		}
+		string::size_type dummy_fcn(string::size_type h) {
+       //warning: here 'h' is from parameter, but not private value of 'h'.	
+			//in class you can use this <class_name>::value.
+			//but outside class only static and pub variable can use <class_name>::value
+			cout<<w*Windows_mgr2::h<<endl;
+			
+			//same as cout << w*this->h << endl;
+
+			return w * Windows_mgr2::h;
+		}
+
+		int w = 2;
+		int h = 9;
 
 };
 
@@ -276,11 +311,57 @@ class Screen2 {
 			pri_val1 = 0;
 		}
 		
+		using abs = std::string::size_type;
+		
+		void ccc (){
+			auto kk = this -> fff();
+		}
+
+		abs fff() {
+			abs ddd = 18;
+			return ddd;
+		}
+		/*if outside class, need declare func as:
+		 *     Screen2::abs Screen2 fff(){
+		 *     	Screen2::abs ddd = 10;
+		 *     	return ddd;
+		 *     }	
+		 * */
+		
 	private:
 		int pri_val_0 = 1;
 		static int pri_val1;
 		mutable int pri_val2 = 17;
 };
+
+
+typedef string::size_type Type;
+Type initval();
+
+class Excercise {
+	public:
+		//ok
+		Excercise():cc(19), ra(val2), rc(val){ 
+			
+			//so infact, ra is refer to val2, but not and never or ever refer to val1, even we define it in private part.
+			rc = 101; //set value after rc is init. so this time rc and referred val will be same changed.
+
+			ra= val3;/*ok. in fact val is 700 */ /*wrong->cc= 12;*/ cout<<"cc"<<cc<<", ra:"<<ra<<",val:"<<val<<", val2:"<<val2<<", val3:"<<val3<<endl<<", rc:"<<rc<<endl; /*wrong: cc = 31;*/}
+		//wrong--> redifination: typedef double Type;
+		Type    setVal(Type);
+		Type	initval(){return 12;}
+		
+	private:
+		int val=100; //init
+		int val2= 300;
+		int val3 = 700;
+		const int cc = 17;
+		int &ra = val;
+
+		int &rc; //this will be ok due to in constructor :'s init will be the final case. But if you be outside of class, this declare must be wrong due to no refer object for init.
+
+};
+
 
 
 
