@@ -37,7 +37,8 @@ int main(void) {
 
 	storeOn(cout, m0_0);
 	storeOn(m1_1, m2_2);
-
+	
+	cout<<"............."<<endl;
 	Windows_mgr2 mgr2;
 	Screen screen0;
 

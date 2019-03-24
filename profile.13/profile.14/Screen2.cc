@@ -1,6 +1,34 @@
 #include "Screen.hpp"
 
 ostream & storeOn(ostream & os, M0 & m0){
+	
+	Screen::pos ht=24, wd=60;
+
+	Screen scr(ht, wd, ' ');
+
+	Screen *p = &scr;
+
+	char c = scr.get();
+	
+	c = p->get();
+
+	unique_ptr<int> pobj(new int);
+	
+	//wrong if (ponj->get)
+	//ok
+	if (pobj.get()) {
+		*(pobj.get()) =  12;
+
+		cout<<*(pobj.get())<<endl;
+	}
+
+	pobj.reset(new int);
+	if (pobj.get()) {
+		*(pobj.get()) =  10;
+
+		cout<<*(pobj.get())<<endl;
+	}
+
 
 	return os;
 }

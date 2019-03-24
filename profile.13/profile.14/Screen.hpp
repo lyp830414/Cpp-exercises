@@ -242,7 +242,7 @@ class TEST_STATIC2 {
 		}*/
 		
 
-	private:
+		
 		int M0::*m0_ptr = &M0::pub_m0;
 		unique_ptr<M0> pm0 = nullptr; 
 		int m0 = 0;
