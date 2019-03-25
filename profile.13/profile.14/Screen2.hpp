@@ -1,6 +1,7 @@
 
 class A {
 public:
+	A() = default;
 	//Note:
 	//in fact, the seq is :  i first init, so i = j, j is 0; then j init, i is 6
 	//so i=0, j =6; the init seq is not like following, but obey to declarsion sequences.

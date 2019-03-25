@@ -31,11 +31,28 @@ void Window_mgr::clear(ScreenIndex i) {
 
 
 int main(void) {
+	A a0;
+	//wrong-> func, is not claSS OBJ!!!
+	//A a1();
+	
+	//A a1{}-->ok.
+	//A a1(1); -->ok
 	A a(1);
 	A a2(cin); //also A a2(); cin will be the default istream
 	cout<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
 	B(cin);
 	cout<<"uyuuuuuuuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
+	
+	//wrong-->vector<NoDefault> vec(19);
+	//wrong-->vector<NoDefault> vec{19};
+	string abc;
+	//wrong "s" and string("s") cannot be referred.-> NoDefault testval1(string("s"));
+	//wrong NoDefault testval2(string("aa"));
+	NoDefault testval1(abc);
+	NoDefault testval2(abc);
+	vector<NoDefault> vec{19, testval1}; //ok, size is 19,all testval1
+	vector<NoDefault> vec2{testval1, testval2}; //ok, size is 2.
+	
 	C c;
 	BB bb;
 	cout<<"bb vec size:"<<bb.vec.size()<<", vec[1]:"<<bb.vec[0].dd<<endl;
