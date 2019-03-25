@@ -74,8 +74,11 @@ struct BB {
 	NoDefault my_mem{cc};
 	//wrong
 	//vector<NoDefault> vec(10);
-	vector<NoDefault> vec{(10, cc)};
 	
+	//vector<NoDefault> vec{(10, cc)};
+	vector<NoDefault> vec{(10, cc, cc, 10, cc)}; //only the last member-->cc is vec's value. vec.size() is 1, value is cc
+	
+	//vector<NoDefault> vec{30, cc}; //ok, vec.size() is 30, all values are cc.
 	
 	//wrong->NoDefault my_mem(); --> a FUNCTION, not member
 	//NoDefault my_mem{} --> still wrong. Here we did not provide non-param or default param constructors.

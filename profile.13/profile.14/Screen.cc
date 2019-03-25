@@ -40,6 +40,7 @@ int main(void) {
 	BB bb;
 	cout<<"bb vec size:"<<bb.vec.size()<<", vec[1]:"<<bb.vec[0].dd<<endl;
 	cout<<"XXXXXuyuuuuuuuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
+	return 0;
 	M0 m0_0;
 	M1 m1_1;
 	M2 m2_2;
