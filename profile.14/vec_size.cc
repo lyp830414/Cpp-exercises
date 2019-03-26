@@ -1,6 +1,10 @@
 #include "vec_size.hpp"
 #include "string"
 
+//wrong: 'explicit' only allows to be appear at class declarsion
+/*explicit*/ K::K(int k){
+}
+
 int main(void) {
 	vector<string> vec(10, "2"); //ok, size is 10, 10 * 2
 	vector<int> vec100(19, 2); //ok, size is 10, 10 * 1

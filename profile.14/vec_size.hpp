@@ -63,6 +63,7 @@ class K {
 	public:
 		explicit K(string){}
 		explicit K(M){}
+		explicit K(int cc);
 		//wrong -> explicit only used in constructors
 		// explicit combine(A){}
 		void combine(Y) {}
