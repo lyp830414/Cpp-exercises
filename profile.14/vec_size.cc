@@ -12,11 +12,16 @@ int main(void) {
 	for(auto & v :  vec100) {
 		cout<<v<<endl;
 	}
-
+	
+	//wrong: 隐式转换只允许直接初始化，不允许=号拷贝初始化
+	//K ks = 123;
+	
+	K ks(123); //ok
 	J j(cin); //if no explicit on Sales_data, will be ok, otherwise wrong.
 	J j2("abc");
-	string a = "aaa"; //隐式转换
+	string a = "aaa"; //不属于隐式转换，重载了=号操作符
 	K k1("123");  // 隐式转换  ok->construct K(const char*-->string)
+	K k2 = "123"; //不允许=号做隐式转换，除非做=号操作符重载
 	//K k2 = string("def"); //ok,but if with explicit in K, will wrong
 	//K k3 = "ddd";//wrong 隐式转换超了1次 const char *-->string ->K(string), 还不到explicit隐式检查 
 	//K km(cin with explicit will be wrong, otherwise ok

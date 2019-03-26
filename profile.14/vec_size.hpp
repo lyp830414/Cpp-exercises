@@ -59,15 +59,22 @@ class Y {
 	public:
 		explicit Y(int){}
 };
+
+class Z {
+	public:
+		Z(int){}
+
+};
 class K {
 	public:
-		explicit K(string){}
+		/*explicit*/ K(string){}
 		explicit K(M){}
 		explicit K(int cc);
 		//wrong -> explicit only used in constructors
 		// explicit combine(A){}
 		void combine(Y) {}
 		~K(){}
+		K(Z){}
 		//wrong-->not construct func, cannot init abc--->void testk():abc(2){}
 		int abc;
 };
