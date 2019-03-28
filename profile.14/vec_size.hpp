@@ -58,6 +58,7 @@ public:
 class Y {
 	public:
 		explicit Y(int){}
+		Y(string){}
 };
 
 class Z {

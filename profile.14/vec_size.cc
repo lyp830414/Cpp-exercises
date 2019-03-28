@@ -9,6 +9,8 @@ int main(void) {
 	vector<string> vec(10, "2"); //ok, size is 10, 10 * 2
 	vector<int> vec100(19, 2); //ok, size is 10, 10 * 1
 
+	
+
 	for(auto & v :  vec100) {
 		cout<<v<<endl;
 	}
@@ -21,11 +23,11 @@ int main(void) {
 	J j2("abc");
 	string a = "aaa"; //不属于隐式转换，重载了=号操作符
 	K k1("123");  // 隐式转换  ok->construct K(const char*-->string)
-	K k2 = "123"; //不允许=号做隐式转换，除非做=号操作符重载
+	//K k2 = "123"; //不允许=号做隐式转换，除非做=号操作符重载
 	//K k2 = string("def"); //ok,but if with explicit in K, will wrong
-	//K k3 = "ddd";//wrong 隐式转换超了1次 const char *-->string ->K(string), 还不到explicit隐式检查 
+	//K k3 = "ddd";//wrong 不允许等号做隐式转换  隐式1次 const char *-->string ->K(string), 还不到explicit隐式检查 
 	//K km(cin with explicit will be wrong, otherwise ok
-	//K k2 = "def"; //wrong 隐式转换超过1次了: const char*->string-->K(string)，还不到explicit隐式检查
+	//K k2 = "def"; //wrong 不允许等号做隐式转换 隐式转换1次: const char*->string-->K(string)，还不到explicit隐式检查
 	//K kms("aaa"); wrong: 同上。
 	
 	//K k(string("123")); ok, same
@@ -37,7 +39,8 @@ int main(void) {
 	
 	//K k(string("aaa")); //ok
 	K k(string("cc"));
-	//k.combine(123);//有explicit, 所以隐式构造Y对象wrong; otherwise ok
+	//wrong: k.combine(123);//有explicit, 所以隐式构造Y对象wrong; otherwise ok
+	//wrong: k.combine("abc"); //wrong: "abc" is const char* -->string, string->Y(string),隐式转换超过1层了
 	//H ttt(string("ccc")); //ccc to M
 	//wrong H ttta("ccc"); //ccc to M
 	H ttt2(M("ccc"));     //M(ccc const char * to string-->M,no way. )
