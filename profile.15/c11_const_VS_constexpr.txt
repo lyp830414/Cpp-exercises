@@ -1,0 +1,69 @@
+const是表明这个值是constant的，但是不必在编译期确定，然而数组的大小是需要在编译期确定的，如：
+int i; // not constant
+const int size = i; // fine!
+
+int arr[size]; // Error!
+
+然而对于constexpr，则表明这个值不仅是constant的，而且也是编译期确定的
+int i; // not constant
+constexpr int size = i; // Error!
+
+于是，constexpr修饰的是可以用于数组大小的。
+
+而为什么在main的const是可以的呢？其实这跟const无关，而是使用了C99的一个特性，名叫variable length array（简称VLA），所以即使是这样：
+
+int main()
+{
+int i;
+cin >> i;
+int arr[i];
+}
+
+你使用你现在的GCC编译，也是可以通过的
+
+那么，为什么VLA的数组不能在全局区呢？那么我想从两方面来解释：
+
+1. 标准文档
+
+在C11标准文档的 6.7.6.2 Array declarators
+2.
+If an identifier is declared as having a variably modified type, it
+shall be an ordinary identifier (as defined in 6.2.3), have no linkage,
+and have either block scope or function prototype scope. If an
+identifier is declared to be an object with static or thread storage
+duration, it shall not have a variable length array type.
+
+10. All declarations of variably modified (VM) types have to be at either block scope or
+function prototype scope. Array objects declared with the _Thread_local, static, or extern
+storage-class specifier cannot have a variable length array (VLA) type.
+However, an object declared with the static storage-class specifier can
+have a VM type (that is, a pointer to a VLA type). Finally, all
+identifiers declared with a VM type have to be ordinary identifiers and
+cannot, therefore, be members of structures or unions.
+
+2. 原理解释
+GCC实现VLA的方式，是allocate memory在stack上，所以，隐藏在VLA下面的是也发生了Memory Allocation的动作，所以你怎么能在全局区去进行Memory Allocation呢？
+
+最
+后，再补充一些constexpr的东西。这是一个C++11引入的东西，C++14对constexpr的范围进行了更大程度的条件放松，而这里我就仅
+谈C++11的。刚才谈到了constexpr是限定了修饰的为编译期间可确定的常量，但是constexpr也是可以用于函数的，而这个时候就不一定可
+以保证最后的值是constexpr了，那么我那次开C++11讲座的时候，介绍的一个小技巧，就是用数组检测是不是编译期的常量，这也是利用了数组大小
+需要编译期间确定的特点：
+
+constexpr int sz()
+{
+return 47;
+};
+
+constexpr size_t scale(size_t cnt)
+{
+return sz() * cnt;
+}
+
+const int i = 3;
+
+int arr[scale(i)]; // OK
+
+int j = 3;
+
+int arr[scale(j)]; //Error! 
