@@ -16,6 +16,54 @@
 #pragma once
 
 using namespace std;
+
+class T1 {
+	public:
+		T1()=default;
+		T1(const T1 &) = delete;
+		~T1(){cout<<"T1 destructor"<<endl;} //not virtual
+};
+
+class T2: public T1 {
+	public:
+	T2()=default;
+	~T2(){cout<<"T2 desturctor"<<endl;}
+};
+
+class TT1 {
+	public:
+		TT1()=default;
+		virtual ~TT1(){cout<<"TT1 destructor"<<endl;}
+};
+
+class TT2: public TT1 {
+	public: 
+		TT2()=default;
+		~TT2(){cout<<"TT2 destructor"<<endl;}
+};
+
+class TMP {
+	public:
+		explicit TMP(int){cout<<"TMP constructor"<<endl;}
+		~TMP(){}
+};
+
+class TMP2{
+
+	public:
+		TMP2(const TMP &) {
+			cout<<"TMP2 constructor"<<endl;
+		}
+
+		TMP2(const TMP2 &) = delete; /*forbid copy constructor*/
+		TMP2 & operator<(const TMP2 &) = delete; /*forbid using operator < */
+		int testval = 2;
+		
+		void echo_val() const {
+			cout<<testval<<endl;
+		}
+};
+
 class Sales_data {
 	public:
 		Sales_data()=default;

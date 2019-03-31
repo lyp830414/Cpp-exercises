@@ -6,6 +6,38 @@
 }
 
 int main(void) {
+	
+	T2 *pt2 = new T2; //will call T2 destroctor, then father's
+	
+	T1 *pt_2 = new T2; // the destructor is real func, so in this case, father pointer will not destructor child's destructor func T2, but only call father destructor T1.
+	
+	TT2 *ptt2 = new TT2; //child's pointer, call child's destructor, and child call father's destructor
+	TT1 *ptt_2 = new TT2; //due to father's destructor is virtual, so the destructor use child's destructor, then in child's destructor, call father's destructor then.
+
+	delete pt2;
+	cout<<"---------"<<endl;
+	delete pt_2;
+
+	cout << "++++++++++++"<<endl;
+
+	delete ptt2;
+	cout<<"---------"<<endl;
+	delete ptt_2;
+	
+	cout<<"+++++++++++++++++++"<<endl;
+
+	T2 t2; // normal object, will destructor child's and child call father desctructor.
+
+	return 0;
+
+
+	//TMP2 tmp12(12); //wrong. explicit donot allow convertor.
+	TMP2 tmp12(TMP(12)); //ok
+	TMP2 tmp2(static_cast<TMP>(12));//ok, static cast allow even explicit convertor; also allow convert if not explicit
+
+	//TMP2 tmp2(TMP(1));
+	tmp2.echo_val();
+
 	vector<string> vec(10, "2"); //ok, size is 10, 10 * value 2
 	vector<string> vec1{12, "2"}; //ok, size is 12, 12 * value 2
 	//wrong  vector<string> vec1{12, 13};
