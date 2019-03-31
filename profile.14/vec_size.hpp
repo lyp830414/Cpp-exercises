@@ -17,6 +17,21 @@
 
 using namespace std;
 
+class TCASE{
+	public:
+		TCASE(string) {}
+};
+
+class EXPLICIT_TEST {
+	public:
+		explicit EXPLICIT_TEST(TCASE) {} //TCASE, 允许被隐式构造，传入string,　你要是传入　const char *　，比如"123"则不可。除非string("123")
+};
+
+class EXPLICIT2 {
+	public:
+		explicit EXPLICIT2(const string &){} //string类，允许隐式构造，允许传入const char *.　构造本对象时要看构造参数的对象是否可以隐式构造，而不是看自己的构造函数是不是带explicit.可以看到参数对象　TCASE允许被隐式构造。只有在当前类作为别人类的构造函数对象时，自己的explicit才管用。
+};
+
 class T1 {
 	public:
 		T1()=default;
@@ -122,7 +137,7 @@ class Z {
 };
 class K {
 	public:
-		/*explicit*/ K(string){}
+		explicit K(string){}
 		explicit K(M){}
 		explicit K(int cc);
 		//wrong -> explicit only used in constructors

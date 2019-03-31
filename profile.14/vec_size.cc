@@ -7,6 +7,15 @@
 
 int main(void) {
 	
+	EXPLICIT_TEST obj(string("123")); //ok.string->TCASE隐转。
+	//EXPLICIT_TEST obj("123"); //wrong, 超过２层隐转
+	
+	EXPLICIT2 exobj("123");
+	
+	
+	//EXPLICIT_TEST obj(string(p_ptr)); //also ok
+	//EXPLICIT_TEST obj2("tcase_string"); //ok: string->TCASE
+
 	T2 *pt2 = new T2; //will call T2 destroctor, then father's
 	
 	T1 *pt_2 = new T2; // the destructor is real func, so in this case, father pointer will not destructor child's destructor func T2, but only call father destructor T1.
@@ -133,7 +142,8 @@ int main(void) {
 	//K k3 = "ddd";//wrong 不允许等号做隐式转换  隐式1次 const char *-->string ->K(string), 还不到explicit隐式检查 
 	//K km(cin with explicit will be wrong, otherwise ok
 	//K k2 = "def"; //wrong 不允许等号做隐式转换 隐式转换1次: const char*->string-->K(string)，还不到explicit隐式检查
-	//K kms("aaa"); wrong: 同上。
+	
+	K kms("aaa"); //ok
 	
 	//K k(string("123")); ok, same
 	K mm("123"); //ok, same
@@ -143,7 +153,8 @@ int main(void) {
 	
 	
 	//K k(string("aaa")); //ok
-	K k(string("cc"));
+	K k(/*string(*/"cc"/*)*/); //ok for both case
+	
 	//wrong: k.combine(123);//有explicit, 所以隐式构造Y对象wrong; otherwise ok
 	//wrong: k.combine("abc"); //wrong: "abc" is const char* -->string, string->Y(string),隐式转换超过1层了
 	//H ttt(string("ccc")); //ccc to M
