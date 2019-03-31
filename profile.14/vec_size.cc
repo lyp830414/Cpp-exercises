@@ -6,9 +6,24 @@
 }
 
 int main(void) {
-	vector<string> vec(10, "2"); //ok, size is 10, 10 * 2
-	vector<int> vec100(19, 2); //ok, size is 10, 10 * 1
-
+	vector<string> vec(10, "2"); //ok, size is 10, 10 * value 2
+	vector<string> vec1{12, "2"}; //ok, size is 12, 12 * value 2
+	//wrong  vector<string> vec1{12, 13};
+	//wrong  vector<string> vec1{12, "2", "4"}; 
+	vector<int> vecA(4,2); /*size: 4, values: 2*/
+	//wrong: vector<int> vecA(4,2,3,5); /*size: 4, values: 2*/
+	vector<int> vecA2{4,2}; /*size: 2, values: 4, 2*/
+	vector<int> vec100(19, 2); //ok, size is 19, 19 * value 2
+	vector<int> vec101{19, 2}; //ok, size is 2, value 19 and 2
+	//wrong-->vector<int> vec100(19, 2, 3); //wrong, only 2 items: number, value allowed
+	
+	cout<<vecA.size()<<endl;
+	cout<<vecA2.size()<<endl;
+	cout<<vec.size()<<endl;
+	cout<<vec1.size()<<endl;
+	cout<<vec100.size()<<endl;
+	cout<<vec101.size()<<endl;
+	return 0;
 	
 
 	for(auto & v :  vec100) {
