@@ -42,6 +42,12 @@ class TT2: public TT1 {
 		~TT2(){cout<<"TT2 destructor"<<endl;}
 };
 
+class VEC {
+	public:
+
+	VEC(int){cout<<"VEC constructor"<<endl;}
+	virtual ~VEC(){}
+};
 class TMP {
 	public:
 		explicit TMP(int){cout<<"TMP constructor"<<endl;}

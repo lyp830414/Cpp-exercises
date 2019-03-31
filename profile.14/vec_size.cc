@@ -28,7 +28,7 @@ int main(void) {
 
 	T2 t2; // normal object, will destructor child's and child call father desctructor.
 
-	return 0;
+	//return 0;
 
 
 	//TMP2 tmp12(12); //wrong. explicit donot allow convertor.
@@ -52,6 +52,10 @@ int main(void) {
 	vector<int> vecInt(10); //size: 10, values: 0
 	vector<int> vecInt2{10}; //size: 1, values: 10
 	
+	vector<VEC> vecT{10}; //ok.
+	cout<<vecT.size()<<endl;
+	//wrong: vector<VEC> vecVec(10); -->vector<int> vecT(10);ok->10 * value: 0
+
 	cout<<vecInt.size()<<endl;
 	
 	for (auto & item : vecInt) cout<<item<<endl;
@@ -65,6 +69,50 @@ int main(void) {
 	cout<<vec1.size()<<endl;
 	cout<<vec100.size()<<endl;
 	cout<<vec101.size()<<endl;
+	
+	vector<VEC> vecT2{10}; //ok.size is 1，隐式构造
+	cout<<"vecT2.size: "<<vecT2.size()<<endl;
+	
+	//vector<VEC> vecT29(10); //wrong.小括号不支持隐式构造
+	
+	VEC valTest(10);
+
+	vector<VEC> vecT220{10,valTest}; //ok. size is 2，隐式构造
+	cout<<"vecT220.size:"<<vecT220.size()<<endl;
+	
+	vector<VEC> vecT2202{static_cast<VEC>(10),valTest}; //ok. size is 2.　static_cast隐式构造，static_cast甚至支持explict的构造函数隐转。
+	cout<<"vecT2202.size:"<<vecT2202.size()<<endl;
+	
+	vector<VEC> vecT221(10,valTest); //ok. size is 10, 10*value: valTest
+	//vector<VEC> vecT221{10,valTest}; //ok. size is 2, value: 隐式转换对象，以及valTest;
+	cout<<"vecT221.size: "<<vecT221.size()<<endl;
+	vector<int> vecComp1{10, 2}; //区别：size is 2, 元素: 10, 2.
+	cout<<"vecComp1.size: "<<vecComp1.size()<<endl;
+	vector<string> vecComp12{10, "2a"}; //区别：size is 10, 元素: 10个"2a".
+	cout<<"vecComp12.size: "<<vecComp12.size()<<endl;
+	vector<int> vecComp2(10, 2); //区别：size is 10, 10个元素2.
+	cout<<"vecComp2.size: "<<vecComp2.size()<<endl;
+	vector<int> vecComp3(10); //size: 10
+	cout<<"vecComp3.size:"<<vecComp3.size()<<endl;
+	vector<int> vecComp4{10}; //size: 1
+	cout<<"vecComp4.size: "<<vecComp4.size()<<endl;
+
+	vector<TT1> vecComp5{10}; //size: 10
+	cout<<"vecComp5.size: "<<vecComp5.size()<<endl;
+
+	//总结： 
+	//       vector<int> abc(10)  //ok, 10个0
+	//       vector<int> abc(10, 3) //ok, 10个3
+	//       vector<int> abc(10,3,5) //wrong.小括号元素不可以超过２个
+	//       vector<classType> abc(10) 不支持隐转，编译出错，必须给初始化值
+	//　　　 vector<classType> abc(10, one_class_obj)//ok, 10个one_class_obj
+	//       vector<int>  abc{10} // 1个元素: 10
+	//       vector<int>  abc{19, 1} //2个元素: 19, 1
+	//       vector<string> abc{10}//ok, 10个空串
+	//       vector<string> abc{10, "abc"} //ok, 10个"abc"
+	//       vector<classType> abc{10}:　分两种情况，如果classType的构造函数包含int，且不是explict的，那么这里abc.size() = 1,采用隐式构造的1个元素 abc(10); 另一种如果classType构造函数不包含int入参，或者是explict的，那么这里 abc.size() = 10, 构造了10个元素
+	//       vector<classType> abc{static_cast<classType>(10), one_class_obj} 这种要求classType要有一个int入参的构造函数，哪怕是explicit的，static_cast都可以构造且隐转成classType对象，所以这种abc.size() = 2, 元素为：一个是构造了一个入参是10的classType构造对象，另一个是one_class_obj
+	
 	return 0;
 	
 
