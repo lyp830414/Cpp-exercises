@@ -17,6 +17,16 @@ int main(void) {
 	vector<int> vec101{19, 2}; //ok, size is 2, value 19 and 2
 	//wrong-->vector<int> vec100(19, 2, 3); //wrong, only 2 items: number, value allowed
 	
+	vector<int> vecInt(10); //size: 10, values: 0
+	vector<int> vecInt2{10}; //size: 1, values: 10
+	
+	cout<<vecInt.size()<<endl;
+	
+	for (auto & item : vecInt) cout<<item<<endl;
+	cout<<"+++++++++++"<<endl;
+	cout<<vecInt2.size()<<endl;
+
+
 	cout<<vecA.size()<<endl;
 	cout<<vecA2.size()<<endl;
 	cout<<vec.size()<<endl;
