@@ -6,7 +6,10 @@
 }
 
 int main(void) {
+	//TCASE tcase{1,2}; //wrong: vector内部为explict构造;　注意string类内部是允许隐式构造的，它区别于vector的explicit构造。
 	
+	TCASE tcase(vector<int>{1,2});//ok. 显式构造vector
+
 	EXPLICIT_TEST obj(string("123")); //ok.string->TCASE隐转。
 	//EXPLICIT_TEST obj("123"); //wrong, 超过２层隐转
 	

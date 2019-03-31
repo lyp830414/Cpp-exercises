@@ -20,6 +20,7 @@ using namespace std;
 class TCASE{
 	public:
 		TCASE(string) {}
+		TCASE(vector<int> cc){}
 };
 
 class EXPLICIT_TEST {
