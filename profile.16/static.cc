@@ -5,8 +5,11 @@
 //ok
 int Account::cc;// = 18;
 
+//for constexpr static value, you can not init here or init here, both are ok.
+//constexpr double Account::interestRate;
+
 //ok
-double Account::interestRate = Account::initRate();//init step, only static meber in class can use private func.
+//double Account::interestRate = Account::initRate();//init step, only static meber in class can use private func.
 double Account::dc2 = Account::initRate();
 
 //also ok
@@ -23,7 +26,7 @@ double Account::dc2 = Account::initRate();
 
 /*outside cannot add 'static' from static member of class*/
 void Account::rate(double newRate) {
-	interestRate = newRate;
+	//interestRate = newRate;
 }
 
 int main(int argc, char *argv[]) {
