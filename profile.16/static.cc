@@ -60,6 +60,8 @@ int main(int argc, char *argv[]) {
 	Account::rate(r);
 
 	cout<<Account::dc2<<endl;
+	cout<<Account::test_val<<endl;
+	cout<<Account::test_val2<<endl;
 	return 0;
 }
 
