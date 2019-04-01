@@ -1,5 +1,9 @@
 #include "static.hpp"
 
+//if you do not declare static const / static constexpr values of class, then cout and normal func parameters will be ok, but for refer & parameters will be wrong.
+constexpr int Account::test_val;
+const int Account::test_val2;
+
 //wrong: outside cannot add 'static' for class-static variables
 //static int Account::cc;
 //ok
@@ -29,7 +33,21 @@ void Account::rate(double newRate) {
 	//interestRate = newRate;
 }
 
+int testCase2(int value, int val2) {
+
+	cout<<value<<endl;	
+}
+
+//wrong: parameters cannot be declared as constexpr
+//int testCase(constexpr int & value) {
+int testCase(const int & value) {
+
+	cout<<value<<endl;	
+}
+
+
 int main(int argc, char *argv[]) {
+
 	Account ac1;
 	Account *ac2 = &ac1;
 	
@@ -62,6 +80,16 @@ int main(int argc, char *argv[]) {
 	cout<<Account::dc2<<endl;
 	cout<<Account::test_val<<endl;
 	cout<<Account::test_val2<<endl;
+
+	
+	//if you do not declare static const/constexpr in cc, following will be wrong.
+	const int & abc2 = Account::test_val2;
+	constexpr const int & abc = Account::test_val;//do not forget const even with constexpr, otherwise const will be missing.
+	testCase(Account::test_val); //ok
+	
+	//but this still ok due to not a refer usage.
+	testCase2(Account::test_val, 0); //ok
+
 	return 0;
 }
 
