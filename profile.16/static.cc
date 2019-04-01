@@ -1,8 +1,8 @@
 #include "static.hpp"
 
 //if you do not declare static const / static constexpr values of class, then cout and normal func parameters will be ok, but for refer & parameters will be wrong.
-constexpr int Account::test_val;
-const int Account::test_val2;
+constexpr int Account::test_val; //wrong for = 2: constexpr already init inclass ----> = 2;
+const int Account::test_val2; //wrong for = 5;-->const already init in class
 
 //wrong: outside cannot add 'static' for class-static variables
 //static int Account::cc;
