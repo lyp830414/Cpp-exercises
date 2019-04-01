@@ -28,6 +28,8 @@ double Account::dc2 = Account::initRate();
 //wrong: cc is not Account's static memeber, so use private func wrong
 //static double cc = Account::initRate();
 
+Bar Bar::mem;
+
 /*outside cannot add 'static' from static member of class*/
 void Account::rate(double newRate) {
 	//interestRate = newRate;
@@ -38,6 +40,8 @@ int testCase2(int value, int val2) {
 	cout<<value<<endl;	
 }
 
+char Screen::background = 'c';
+
 //wrong: parameters cannot be declared as constexpr
 //int testCase(constexpr int & value) {
 int testCase(const int & value) {
@@ -46,8 +50,10 @@ int testCase(const int & value) {
 }
 
 
-int main(int argc, char *argv[]) {
+constexpr int Screen::ddf;
 
+int main(int argc, char *argv[]) {
+	
 	Account ac1;
 	Account *ac2 = &ac1;
 	
@@ -90,6 +96,16 @@ int main(int argc, char *argv[]) {
 	//but this still ok due to not a refer usage.
 	testCase2(Account::test_val, 0); //ok
 
+	cout<<Bar::mem.abc<<endl;
+
+	//int a = 1;
+	//constexpr int zz = a;
+	
+	Screen ssss; 
+	cout<<ssss.abc<<endl; //'c'
+	Screen::background = 'e';
+	Screen ssss2;
+	cout<<ssss2.abc<<endl; //'e'
 	return 0;
 }
 

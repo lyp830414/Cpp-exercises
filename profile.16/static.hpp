@@ -17,6 +17,16 @@
 #pragma once
 
 using namespace std;
+class Bar {
+	public:
+		Bar(){cout<<"Bar constructor"<<endl; abc=21;}
+		virtual ~Bar(){}
+		int abc = 19;
+		static Bar mem; //static same member.static独立于类外，所以只会做一次构造，不会死循环。
+	private:
+		Bar *p_mem;//OK
+		//Bar mem2;//wrong　-->本类不能构造本类对象，指针除外，或者static除外
+};
 
 class Account {
 	public:
@@ -50,3 +60,31 @@ class Account {
 		static double initRate(){/*this->cc=19; wrong*/cc=19;/*ok*/ return 1.1;}
 		double initRate2(){/*this->cc=19; wrong*/cc=19;/*ok*/ return 1.1;}
 };
+
+class Screen {
+	public:
+		//ok. can use static part
+		Screen():abc(background), abc2(abc){
+			//abc = background; -->both init ok.
+		}
+		//wrong: b=ddm, ddm must be static or const /constexpr
+		//Screen & clear(char=background, int b=ddm){}
+		//wrong: b=ddm, ddm2 must be static or const /constexpr
+		//Screen & clear(char=background, int b=ddm2){}
+		//wrong: ddm3 must be static.
+		//Screen & clear(char=background, int b=ddm3){}
+		
+		//ok
+		Screen & clear(char=background, int b=ddm3){}
+		static /*const*/ char background;
+		char abc;
+		int ddm = 0;
+		const int ddm2 = 2;
+		constexpr int ddm3 = 2;
+		static int abc;
+		constexpr static int dde= 16;
+		constexpr static int ddf;
+	private:
+		char abc2;
+};
+
