@@ -38,10 +38,14 @@ class Account {
 	private:
 		std::string owner;
 		double amount; 
-		//for static values-->only "static constexpr" values canbe init in class.
+		//for static values-->only "static constexpr | static const" values canbe init in class. and you can skip declare in head of cc file. Also you can declare again in head of cc file
+
 		static constexpr double interestRate = 12; //=12 -wrong: static member cannot init value here.
 		static constexpr int test_val = 77;//static constexpr do not need to declare again in head of cc files, but also you can delcare in head of cc if you like.
+		static const int test_val2 = 78; //ok 
+
 		int array_test[test_val] = {0}; //ok. can use
+		int array_test2[test_val2] = {0}; //ok. can use
 		static double initRate(){/*this->cc=19; wrong*/cc=19;/*ok*/ return 1.1;}
 		double initRate2(){/*this->cc=19; wrong*/cc=19;/*ok*/ return 1.1;}
 };
