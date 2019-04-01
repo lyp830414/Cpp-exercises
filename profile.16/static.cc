@@ -9,6 +9,9 @@ int Account::cc;// = 18;
 double Account::interestRate = Account::initRate();//init step, only static meber in class can use private func.
 double Account::dc2 = Account::initRate();
 
+//also ok
+//double Account::d2= Account::interestRate; //init step, only static meber in class can use private member or static private func.
+
 //wrong: static member can only call static func, member, initRate2 is not static member func.
 //double Account::interestRate = Account::initRate2();//wrong in init step, initRate2 is not a static func member.So private cannot be used.
 
