@@ -1,5 +1,12 @@
 #include "static.hpp"
 
+double Example::rate; //=6.5 ok
+vector<double> Example::vec;
+constexpr int Screen::ddm3; //cannot set = 0 here for constexpr;
+int Screen::abc100; //you can set = 12; value, or not set, it is not constexpr or const
+constexpr int Screen::dde;//wrong if set like = 10;
+constexpr int Screen::ddf;//wrong if set like = 110;
+
 //if you do not declare static const / static constexpr values of class, then cout and normal func parameters will be ok, but for refer & parameters will be wrong.
 constexpr int Account::test_val; //wrong for = 2: constexpr already init inclass ----> = 2;
 const int Account::test_val2; //wrong for = 5;-->const already init in class
@@ -48,9 +55,6 @@ int testCase(const int & value) {
 
 	cout<<value<<endl;	
 }
-
-
-constexpr int Screen::ddf;
 
 int main(int argc, char *argv[]) {
 	

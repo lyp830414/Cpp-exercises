@@ -64,7 +64,8 @@ class Account {
 class Screen {
 	public:
 		//ok. can use static part
-		Screen():abc(background), abc2(abc){
+		Screen():abc(background), abc2(abc)/*,wrong: ddm3(12)*/{
+			//wrong: ddm3 = 12; //constexpr,cannot be changed
 			//abc = background; -->both init ok.
 		}
 		//wrong: b=ddm, ddm must be static or const /constexpr
@@ -80,11 +81,23 @@ class Screen {
 		char abc;
 		int ddm = 0;
 		const int ddm2 = 2;
-		constexpr int ddm3 = 2;
-		static int abc;
-		constexpr static int dde= 16;
-		constexpr static int ddf;
+		//wrong
+		//constexpr int ddm3 = 2; 
+		//ok
+		constexpr static int ddm3 = 0; //if not set = 0, then wrong
+		static int abc100;
+		constexpr static int dde = 16;
+		constexpr static int ddf = 1;
 	private:
 		char abc2;
+};
+
+
+class Example {
+	public:
+		static double rate;
+		static const int vecSize = 20;
+		static vector<double> vec;//wrong(10, 2.2);//wrong: static cannot init here(/*vecSize*/10, 2.2);
+		
 };
 
